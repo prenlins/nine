@@ -1,0 +1,16 @@
+all: server client
+
+server: message.pb.o server.o
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+client: message.pb.o client.o
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+%.o: %.cc
+	$(CXX) -c $< $(CXXFLAGS)
+
+message.pb.cc:
+	protoc --proto_path=./ --cpp_out=./ ./message.proto
+
+clean:
+	rm -f server client *.o message.pb.*
